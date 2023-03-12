@@ -26,7 +26,7 @@ public class JDBC_Main extends JDBC_Controler {
             /*setState();*/
 
             // 2ème Type ('createStatement' avec argument(s) ['int' (ResultSet)])
-            setState(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            /*setState(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);*/
 
             //***// Différents types de 'Statement' //***//
 
