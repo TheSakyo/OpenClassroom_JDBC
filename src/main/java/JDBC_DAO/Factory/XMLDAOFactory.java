@@ -1,18 +1,18 @@
 package JDBC_DAO.Factory;
 
 import JDBC_DAO.DAOClass.DAO;
-import JDBC_DAO.TableClass.Classe;
-import JDBC_DAO.TableClass.Eleve;
-import JDBC_DAO.TableClass.Matiere;
-import JDBC_DAO.TableClass.Professeur;
+import JDBC_DAO.TableClass.Class;
+import JDBC_DAO.TableClass.Professor;
+import JDBC_DAO.TableClass.Student;
+import JDBC_DAO.TableClass.Subject;
 
 public class XMLDAOFactory extends AbstractDAOFactory {
 
-    public DAO<Classe> getClasseDAO() { return null; }
+    public DAO<Class> getClassDao() { return null; }
 
-    public DAO<Eleve> getEleveDAO() { return null; }
+    public DAO<Student> getStudentDao() { return null; }
 
-    public DAO<Matiere> getMatiereDAO() { return null; }
+    public DAO<Subject> getSubjectDao() { return null; }
 
-    public DAO<Professeur> getProfesseurDAO() { return null; }
+    public DAO<Professor> getProfesseurDAO() { return null; }
 }

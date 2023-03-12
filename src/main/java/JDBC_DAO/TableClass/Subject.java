@@ -1,6 +1,6 @@
 package JDBC_DAO.TableClass;
 
-public class Matiere {
+public class Subject {
 
     //ID
     private int id = 0;
@@ -8,8 +8,8 @@ public class Matiere {
     //Nom du professeur
     private String name = "";
 
-    public Matiere(){}
-    public Matiere(int id, String name) { this.id = id; this.name = name; }
+    public Subject(){}
+    public Subject(int id, String name) { this.id = id; this.name = name; }
 
     public int getId() { return id; }
 

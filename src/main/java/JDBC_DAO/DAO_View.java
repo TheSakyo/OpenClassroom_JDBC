@@ -2,10 +2,10 @@ package JDBC_DAO;
 
 import JDBC_DAO.DAOClass.DAO;
 import JDBC_DAO.Factory.AbstractDAOFactory;
-import JDBC_DAO.TableClass.Classe;
-import JDBC_DAO.TableClass.Eleve;
-import JDBC_DAO.TableClass.Matiere;
-import JDBC_DAO.TableClass.Professeur;
+import JDBC_DAO.TableClass.Class;
+import JDBC_DAO.TableClass.Professor;
+import JDBC_DAO.TableClass.Student;
+import JDBC_DAO.TableClass.Subject;
 
 import java.sql.SQLException;
 
@@ -18,59 +18,59 @@ public class DAO_View {
             AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
 
             //Testons des élèves
-            DAO<Eleve> eleveDao = adf.getEleveDAO();
+            DAO<Student> studentDao = adf.getStudentDao();
 
             for(int i = 1; i < 5; i++) {
 
-                Eleve eleve = eleveDao.find(i);
-                System.out.println("Elève N°" + eleve.getId() + "  - " + eleve.getName() + " " + eleve.getFirstname());
+                Student student = studentDao.find(i);
+                System.out.println("Elève N°" + student.getId() + "  - " + student.getLastName() + " " + student.getFirstName());
             }
 
             System.out.println("\n********************************\n");
 
             //Voyons voir les professeurs
-            DAO<Professeur> profDao = adf.getProfesseurDAO();
+            DAO<Professor> profDao = adf.getProfesseurDAO();
 
             for(int i = 4; i < 8; i++) {
 
-                Professeur prof = profDao.find(i);
+                Professor prof = profDao.find(i);
 
-                System.out.println(prof.getName() + " " + prof.getFirstname() + " enseigne : ");
+                System.out.println(prof.getLastName() + " " + prof.getFirstName() + " enseigne : ");
 
-                for(Matiere mat : prof.getListMaterial()) System.out.println("\t * " + mat.getName());
+                for(Subject sub : prof.getListMaterial()) System.out.println("\t * " + sub.getName());
             }
 
             System.out.println("\n********************************\n");
 
-            //Et là, c'est la classe
-            DAO<Classe> classeDao = adf.getClasseDAO();
+            //Et là, c'est la aClass
+            DAO<Class> classDao = adf.getClassDao();
 
-            Classe classe = classeDao.find(11);
+            Class aClass = classDao.find(11);
 
-            System.out.println("Classe de " + classe.getName());
+            System.out.println("Class de " + aClass.getName());
             System.out.println("\nListe des élèves :");
 
-            for(Eleve eleve : classe.getListStudent()) System.out.println("  - " + eleve.getName() + " " + eleve.getFirstname());
+            for(Student student : aClass.getListStudent()) System.out.println("  - " + student.getLastName() + " " + student.getFirstName());
 
             System.out.println("\nListe des professeurs :");
 
-            for(Professeur prof : classe.getListProfessor()) {
+            for(Professor prof : aClass.getListProfessor()) {
 
-                System.out.println("  - " + prof.getName() + " " + prof.getFirstname());
+                System.out.println("  - " + prof.getLastName() + " " + prof.getFirstName());
 
                 //Tant qu'à faire, on prend aussi les matières
-                for(Matiere mat : prof.getListMaterial()) System.out.println("\t\t\t * " + mat.getName());
+                for(Subject sub : prof.getListMaterial()) System.out.println("\t\t\t * " + sub.getName());
 
             }
 
             System.out.println("\n********************************\n");
 
             //Un petit essai sur les matières
-            DAO<Matiere> matiereDao = adf.getMatiereDAO();
+            DAO<Subject> subjectDao = adf.getSubjectDao();
 
-            Matiere mat = matiereDao.find(2);
+            Subject sub = subjectDao.find(2);
 
-            System.out.println("\tMATIERE " + mat.getId() + " : " + mat.getName());
+            System.out.println("\tMATIERE " + sub.getId() + " : " + sub.getName());
 
         } catch(SQLException | ClassNotFoundException e) { e.printStackTrace(); }
     }

@@ -13,16 +13,12 @@ public class JDBC_Connect {
     private static final String user = "postgres";
 
     //Mot de passe de l'utilisateur
-<<<<<<< HEAD
-    private static final String passwd = "Sachaenzo@0609";
-=======
     private static final String passwd = "root@postgres";
->>>>>>> ecbe9cf (Initial commit)
 
     //Objet Connection
     private volatile static Connection connect;
 
-
+    
     //Méthode qui va nous retourner notre instance et la créer si elle n'existe pas
     public static Connection getInstance() throws SQLException, ClassNotFoundException {
 

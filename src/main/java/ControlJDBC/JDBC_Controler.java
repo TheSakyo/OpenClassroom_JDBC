@@ -45,7 +45,7 @@ public class JDBC_Controler {
             //On récupère les MetaData
             ResultSetMetaData resultMeta = RS.getMetaData();
 
-            if(Objects.equals(tablename, "professeur")) {
+            if(Objects.equals(tablename, "professor")) {
 
                 System.out.println("- Il y a " + resultMeta.getColumnCount() + " colonnes dans cette table");
 
@@ -58,8 +58,8 @@ public class JDBC_Controler {
                 while(RS.next()) {
 
                     System.out.print("\t" + RS.getInt("prof_id") + "\t |");
-                    System.out.print("\t" +  RS.getString("prof_nom") + "\t |");
-                    System.out.print("\t" +  RS.getString("prof_prenom") + "\t |");
+                    System.out.print("\t" +  RS.getString("prof_lastname") + "\t |");
+                    System.out.print("\t" +  RS.getString("prof_firstname") + "\t |");
 
                     System.out.println("\n---------------------------------");
                 }
@@ -84,18 +84,18 @@ public class JDBC_Controler {
             /* permet de prendre en compte une requête spécifique si le boolean 'autoCommit' est faux */
             if(autoCommit instanceof Boolean B) if(!B) JDBC_Connect.getInstance().commit();
 
-        } else { System.out.println("An object is badly casted !"); }
+        } else { System.out.println("Un objet est mal moulé !"); }
     }
 
 
     protected static void getTableInfo() throws SQLException, ClassNotFoundException {
 
-        String query = "SELECT prof_nom, prof_prenom, mat_nom, cls_nom FROM professeur";
-        query += " INNER JOIN j_mat_prof ON jmp_prof_k = prof_id";
-        query += " INNER JOIN matiere ON jmp_mat_k = mat_id";
+        String query = "SELECT prof_lastname, prof_firstname, sub_name, cls_name FROM professor";
+        query += " INNER JOIN j_sub_prof ON jmp_prof_k = prof_id";
+        query += " INNER JOIN subject ON jmp_sub_k = sub_id";
         query += " INNER JOIN j_cls_jmp ON jcm_jmp_k = jmp_id";
-        query += " INNER JOIN classe ON jcm_cls_k = cls_id AND cls_id IN(1, 7)";
-        query += " ORDER BY cls_nom DESC, prof_nom";
+        query += " INNER JOIN class ON jcm_cls_k = cls_id AND cls_id IN(1, 7)";
+        query += " ORDER BY cls_name DESC, prof_lastname";
 
         result[0] = state.executeQuery(query);
 
@@ -106,35 +106,35 @@ public class JDBC_Controler {
 
             while(RS.next()) {
 
-                if(!nameClass.equals(RS.getString("cls_nom"))) {
+                if(!nameClass.equals(RS.getString("cls_name"))) {
 
-                    nameClass = RS.getString("cls_nom");
-                    System.out.println("Classe de " + nameClass + " :");
+                    nameClass = RS.getString("cls_name");
+                    System.out.println("Class de " + nameClass + " :");
                 }
 
-                if(!name.equals(RS.getString("prof_nom"))) {
+                if(!name.equals(RS.getString("prof_lastname"))) {
 
-                    name = RS.getString("prof_nom");
-                    System.out.println("\t * " + name + " " + RS.getString("prof_prenom") + " enseigne : ");
+                    name = RS.getString("prof_lastname");
+                    System.out.println("\t * " + name + " " + RS.getString("prof_firstname") + " enseigne : ");
                 }
 
-                System.out.println("\t\t\t - " + RS.getString("mat_nom"));
+                System.out.println("\t\t\t - " + RS.getString("sub_name"));
             }
 
             /* permet de prendre en compte une requête spécifique si le boolean 'autoCommit' est faux */
             if(autoCommit instanceof Boolean B) if(!B) JDBC_Connect.getInstance().commit();
 
-        } else { System.out.println("An object is badly casted !"); }
+        } else { System.out.println("Un objet est mal moulé !"); }
     }
 
     @SuppressWarnings("SameParameterValue")
     protected static void getSpecialCharValueFromTable(char character) throws SQLException, ClassNotFoundException {
 
         //On crée la requête
-        String query = "SELECT prof_nom, prof_prenom FROM professeur";
+        String query = "SELECT prof_lastname, prof_firstname FROM professor";
 
         //Premier trou pour le nom du professeur
-        query += " WHERE prof_nom = " + character;
+        query += " WHERE prof_lastname = " + character;
 
         //Deuxième trou pour l'identifiant du professeur
         query += " OR prof_id = " + character;
@@ -169,13 +169,13 @@ public class JDBC_Controler {
             /* permet de prendre en compte une requête spécifique si le boolean 'autoCommit' est faux */
             if(autoCommit instanceof Boolean B) if(!B) JDBC_Connect.getInstance().commit();
 
-        } else { System.out.println("An object is badly casted !"); }
+        } else { System.out.println("Un objet est mal moulé !"); }
     }
 
 
     protected static void showContentTableWithLine() throws SQLException, ClassNotFoundException {
 
-        String query = "SELECT prof_nom, prof_prenom FROM professeur";
+        String query = "SELECT prof_lastname, prof_firstname FROM professor";
         
         //On crée l'objet avec la requête en paramètre
         result[0] = state.executeQuery(query);
@@ -189,7 +189,7 @@ public class JDBC_Controler {
 
             while(RS.next()) {
 
-                System.out.println("\tNom : " + RS.getString("prof_nom")  + " \t prénom : " + RS.getString("prof_prenom"));
+                System.out.println("\tNom : " + RS.getString("prof_lastname")  + " \t prénom : " + RS.getString("prof_firstname"));
 
                 //On regarde si on se trouve sur la dernière ligne du résultat
                 if(RS.isLast()) System.out.println("\t\t* DERNIER RESULTAT !\n");
@@ -205,7 +205,7 @@ public class JDBC_Controler {
 
             //On se trouve alors à la fin
             //On peut parcourir le résultat en sens contraire
-            while(RS.previous()) { System.out.println("\tNom : " + RS.getString("prof_nom") + " \t prénom : " + RS.getString("prof_prenom"));
+            while(RS.previous()) { System.out.println("\tNom : " + RS.getString("prof_lastname") + " \t prénom : " + RS.getString("prof_firstname"));
 
                 //On regarde si on se trouve sur la première ligne du résultat
                 if(RS.isFirst()) System.out.println("\t\t* RETOUR AU DEBUT !\n");
@@ -222,7 +222,7 @@ public class JDBC_Controler {
             //Peu importe où on se trouve
             RS.absolute(i/2);
 
-            while(RS.next()) System.out.println("\tNom : " + RS.getString("prof_nom") +" \t prénom : " + RS.getString("prof_prenom"));
+            while(RS.next()) System.out.println("\tNom : " + RS.getString("prof_lastname") +" \t prénom : " + RS.getString("prof_firstname"));
 
             System.out.println("\t---------------------------------------");
             System.out.println("\tAprès positionnement relatif du curseur à la place N° " + (i - (i-2)) + ".");
@@ -232,18 +232,18 @@ public class JDBC_Controler {
             //Si on n'avait pas mis de signe moins, on aurait avancé de i-2 lignes
             RS.relative(-(i-2));
 
-            while(RS.next()) System.out.println("\tNom : " + RS.getString("prof_nom") + " \t prénom : " + RS.getString("prof_prenom"));
+            while(RS.next()) System.out.println("\tNom : " + RS.getString("prof_lastname") + " \t prénom : " + RS.getString("prof_firstname"));
 
             /* permet de prendre en compte une requête spécifique si le boolean 'autoCommit' est faux */
             if(autoCommit instanceof Boolean B) if(!B) JDBC_Connect.getInstance().commit();
 
-        } else { System.out.println("An object is badly casted !"); }
+        } else { System.out.println("Un objet est mal moulé !"); }
     }
 
     protected static void updateTable() throws SQLException, ClassNotFoundException {
 
         //On va chercher une ligne dans la base de données
-        String query = "SELECT prof_id, prof_nom, prof_prenom FROM professeur " + "WHERE prof_nom = 'MAMOU'";
+        String query = "SELECT prof_id, prof_lastname, prof_firstname FROM professor " + "WHERE prof_lastname = 'MAMOU'";
 
         result[0] = state.executeQuery(query);
 
@@ -252,29 +252,29 @@ public class JDBC_Controler {
             RS.first();
 
             //On affiche ce que l'on trouve
-            System.out.println("NOM : " + RS.getString("prof_nom") + " - PRENOM : " + RS.getString("prof_prenom"));
+            System.out.println("NOM : " + RS.getString("prof_lastname") + " - PRENOM : " + RS.getString("prof_firstname"));
 
             //On met à jour les champs
-            RS.updateString("prof_nom", "COURTEL");
-            RS.updateString("prof_prenom", "Angelo");
+            RS.updateString("prof_lastname", "COURTEL");
+            RS.updateString("prof_firstname", "Angelo");
             //On valide
             RS.updateRow();
 
             //On affiche les modifications
             System.out.println("*********************************");
             System.out.println("APRES MODIFICATION : ");
-            System.out.println("\tNOM : " + RS.getString("prof_nom") + " - PRENOM : " + RS.getString("prof_prenom") + "\n");
+            System.out.println("\tNOM : " + RS.getString("prof_lastname") + " - PRENOM : " + RS.getString("prof_firstname") + "\n");
 
             //On remet les informations de départ
-            RS.updateString("prof_nom", "MAMOU");
-            RS.updateString("prof_prenom", "Daniel");
+            RS.updateString("prof_lastname", "MAMOU");
+            RS.updateString("prof_firstname", "Daniel");
             //On valide à nouveau
             RS.updateRow();
 
             //Et voilà !
             System.out.println("*********************************");
             System.out.println("APRES REMODIFICATION : ");
-            System.out.println("\tNOM : " + RS.getString("prof_nom") + " - PRENOM : " + RS.getString("prof_prenom") + "\n");
+            System.out.println("\tNOM : " + RS.getString("prof_lastname") + " - PRENOM : " + RS.getString("prof_firstname") + "\n");
 
             /* permet de prendre en compte une requête spécifique si le boolean 'autoCommit' est faux */
             if(autoCommit instanceof Boolean B) if(!B) JDBC_Connect.getInstance().commit();
@@ -285,12 +285,12 @@ public class JDBC_Controler {
     protected static void updateValuesTable() throws SQLException, ClassNotFoundException {
 
         //On va chercher une ligne dans la base de données
-        String query = "SELECT prof_nom, prof_prenom FROM professeur "+"WHERE prof_nom ='MAMOU'";
+        String query = "SELECT prof_lastname, prof_firstname FROM professor WHERE prof_lastname ='MAMOU'";
 
         //On exécute la requête
         result[0] = state.executeQuery(query);
 
-        result[1] = JDBC_Connect.getInstance().prepareStatement("UPDATE professeur set prof_prenom = ? "+"WHERE prof_nom = 'MAMOU'");
+        result[1] = JDBC_Connect.getInstance().prepareStatement("UPDATE professor set prof_firstname = ? WHERE prof_lastname = 'MAMOU'");
 
         if(result[0] instanceof ResultSet RS && result[1] instanceof PreparedStatement PS) {
 
@@ -299,7 +299,7 @@ public class JDBC_Controler {
             //On affiche
             System.out.println("\n\tDONNEES D'ORIGINE : ");
             System.out.println("\t-------------------");
-            System.out.println("\tNOM : " + RS.getString("prof_nom") + " - PRENOM : " +  RS.getString("prof_prenom"));
+            System.out.println("\tNOM : " + RS.getString("prof_lastname") + " - PRENOM : " +  RS.getString("prof_firstname"));
 
             //On paramètre notre requête préparée
             PS.setString(1, "Gérard");
@@ -311,7 +311,7 @@ public class JDBC_Controler {
             RS.first();
             //On affiche à nouveau
             System.out.println("\n\t\t APRES MAJ : ");
-            System.out.println("\t\t * NOM : " + RS.getString("prof_nom") + " - PRENOM :" + RS.getString("prof_prenom"));
+            System.out.println("\t\t * NOM : " + RS.getString("prof_lastname") + " - PRENOM :" + RS.getString("prof_firstname"));
 
             //On effectue une mise à jour
             PS.setString(1, "Daniel");
@@ -321,37 +321,37 @@ public class JDBC_Controler {
             RS.first();
             //On affiche une nouvelle fois
             System.out.println("\n\t\t REMISE A ZERO : ");
-            System.out.println("\t\t * NOM : " + RS.getString("prof_nom") + " - PRENOM :" + RS.getString("prof_prenom"));
+            System.out.println("\t\t * NOM : " + RS.getString("prof_lastname") + " - PRENOM :" + RS.getString("prof_firstname"));
 
             /* permet de prendre en compte une requête spécifique si le boolean 'autoCommit' est faux */
             if(autoCommit instanceof Boolean B) if(!B) JDBC_Connect.getInstance().commit();
 
-        } else { System.out.println("One or more objects is badly casted !"); }
+        } else { System.out.println("Un ou plusieurs objets sont mal moulés !"); }
     }
 
 
     protected static void transactTable() throws SQLException {
 
-        String query = "UPDATE professeur SET prof_prenom = 'Cyrille' " + "WHERE prof_nom = 'MAMOU'";
+        String query = "UPDATE professor SET prof_firstname = 'Cyrille' " + "WHERE prof_lastname = 'MAMOU'";
 
-        result[0] = state.executeQuery("SELECT * FROM professeur" + " WHERE prof_nom = 'MAMOU'");
+        result[0] = state.executeQuery("SELECT * FROM professor" + " WHERE prof_lastname = 'MAMOU'");
 
         if(result[0] instanceof ResultSet RS) {
 
             RS.first();
-            System.out.println("NOM : " + RS.getString("prof_nom") + " - PRENOM : " + RS.getString("prof_prenom"));
+            System.out.println("NOM : " + RS.getString("prof_lastname") + " - PRENOM : " + RS.getString("prof_firstname"));
 
             state.executeUpdate(query);
 
-            RS = state.executeQuery("SELECT * FROM professeur WHERE prof_nom = 'MAMOU'");
+            RS = state.executeQuery("SELECT * FROM professor WHERE prof_lastname = 'MAMOU'");
 
             RS.first();
-            System.out.println("NOM : " + RS.getString("prof_nom") + " - PRENOM : " + RS.getString("prof_prenom"));
+            System.out.println("NOM : " + RS.getString("prof_lastname") + " - PRENOM : " + RS.getString("prof_firstname"));
 
             /* permet de prendre en compte une requête spécifique si le boolean 'autoCommit' est faux */
             //if(autoCommit instanceof Boolean B) if(!B) ControlJDBC.JDBC_Connect.getInstance().commit();
 
-        } else { System.out.println("An object is badly casted !"); }
+        } else { System.out.println("Un objet est mal moulé !"); }
     }
 
     // ** Création d'un objet Statement ** //
